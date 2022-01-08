@@ -1,25 +1,25 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
+import Grid from "./components/Grid";
+import { AppContainer } from "./styles";
+import { generateGridState } from "./utils/generateGridState";
+import { generateNextGridState } from "./utils/generateNextGridState";
 
 function App() {
+  const [gridState, setGridState] = useState(generateGridState())
+
+  const generateNewState = () => {
+    setGridState((prev) => generateNextGridState(prev))
+  }
+
+  useEffect(() => {
+    const interval = setInterval(generateNewState, 400);
+    return () => clearInterval(interval)
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AppContainer>
+      <Grid gridState={gridState} />
+    </AppContainer>
   );
 }
 
